@@ -8,8 +8,8 @@ import '../models/cat_model.dart';
 
 
 class CatProvider extends ChangeNotifier {
-  late CatModelResponse _loadedResults;
-  CatModelResponse get loadedResults => _loadedResults;
+  late List<CatFact>_loadedResults;
+  List<CatFact> get loadedResults => _loadedResults;
 
   Future<http.Response> loadCatApi() async {
     String url = Environment.CAT_API_URL;
@@ -24,7 +24,7 @@ class CatProvider extends ChangeNotifier {
 
     Map<String, dynamic> jsonMap = json.decode(response.body);
 
-    CatModelResponse catFactResponse = CatModelResponse.fromJson(jsonMap);
+    List<CatFact> catFactResponse = CatModelResponse.fromJson(jsonMap).data;
 
 
     _loadedResults = catFactResponse;

@@ -1,13 +1,33 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/search_component.dart';
 import '../../models/cat_model.dart';
 import '../../providers/cat_provider.dart';
 import '../api_views_detail/cat_facts_detail.dart';
 
-class CatFacts extends StatelessWidget {
+class CatFacts extends StatefulWidget {
   const CatFacts({super.key});
+
+  @override
+  State<CatFacts> createState() => _CatFactsState();
+}
+
+class _CatFactsState extends State<CatFacts> {
+  TextEditingController searchController = TextEditingController();
+  List<CatFact> filteredFacts = [];
+  Timer? _debounceTimer;
+
+  @override
+  void initState() {
+    final CatProvider catProvider = Provider.of<CatProvider>(context, listen: false);
+    List<CatFact> catLoadedResults = catProvider.loadedResults;
+    setState(() {
+      filteredFacts = catLoadedResults;
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,21 +39,34 @@ class CatFacts extends StatelessWidget {
           } else if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           } else {
-            final CatProvider catProvider = Provider.of<CatProvider>(
-                context, listen: false);
-            final CatModelResponse catLoadedResults = catProvider.loadedResults;
+            final CatProvider catProvider = Provider.of<CatProvider>(context, listen: false);
+            List<CatFact> catLoadedResults = catProvider.loadedResults;
             return
               Column(
                 children: [
-                  SearchComponent(
-                    controller: catProvider.searchController,
-                    onTextChanged: (value) {
-                      catProvider.filterFacts(value);
-                    },
-                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextField(
+                      controller: searchController,
+                      decoration: const InputDecoration(
+                        labelText: 'Hledat..',
+                      ),
+                      onChanged: (value) {
+                        if (_debounceTimer != null) {
+                          _debounceTimer!.cancel();
+                        }
+                        _debounceTimer = Timer(Duration(milliseconds: 350), () {
+                          setState(() {
+                            filteredFacts = catLoadedResults
+                                .where((fact) => fact.fact.toLowerCase().contains(value.toLowerCase()))
+                                .toList();
+                          });
+                        });
+                    }
+                  )),
                   Expanded(
                     child: ListView.builder(
-                    itemCount: catLoadedResults.data.length,
+                    itemCount: filteredFacts.length,
                     itemBuilder: (context, index) {
                       return Card(
                         elevation: 5,
@@ -44,7 +77,7 @@ class CatFacts extends StatelessWidget {
                           title: Text("Fact about the cat #$index",
                               style: const TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.bold)),
-                          subtitle: Text(catLoadedResults.data[index].fact,
+                          subtitle: Text(filteredFacts[index].fact,
                             style: const TextStyle(fontSize: 18),),
                           trailing: const Icon(Icons.info_outline),
                           dense: true,
@@ -52,7 +85,7 @@ class CatFacts extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => CatDetailPage(catFact: catLoadedResults.data[index], index: index,),
+                                builder: (context) => CatDetailPage(catFact: filteredFacts[index], index: index,),
                               ),
                             );
                           },
