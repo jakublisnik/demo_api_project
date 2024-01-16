@@ -1,5 +1,5 @@
 import 'package:demo_api_project/providers/cat_provider.dart';
-import 'package:demo_api_project/views/list_of_api.dart';
+import 'package:demo_api_project/views/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -20,11 +20,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const ListOfApi(),
+      home: const HomeScreen(),
     );
   }
 }

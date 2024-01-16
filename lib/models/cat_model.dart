@@ -1,9 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'cat_fact.g.dart';
+part 'cat_model.g.dart';
 
 @JsonSerializable()
-class CatFactResponse {
+class CatModelResponse {
   final int currentPage;
   final List<CatFact> data;
   final String firstPageUrl;
@@ -18,7 +18,7 @@ class CatFactResponse {
   final int to;
   final int total;
 
-  CatFactResponse(
+  CatModelResponse(
       this.currentPage,
       this.data,
       this.firstPageUrl,
@@ -33,7 +33,7 @@ class CatFactResponse {
       this.to,
       this.total);
 
-  factory CatFactResponse.fromJson(Map<String, dynamic> json) =>
+  factory CatModelResponse.fromJson(Map<String, dynamic> json) =>
       _$CatFactResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$CatFactResponseToJson(this);

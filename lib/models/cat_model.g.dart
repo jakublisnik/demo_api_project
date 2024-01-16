@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'cat_fact.dart';
+part of 'cat_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-CatFactResponse _$CatFactResponseFromJson(Map<String, dynamic> json) =>
-    CatFactResponse(
+CatModelResponse _$CatFactResponseFromJson(Map<String, dynamic> json) =>
+    CatModelResponse(
       json['current_page'] as int,
       (json['data'] as List<dynamic>)
           .map((e) => CatFact.fromJson(e as Map<String, dynamic>))
@@ -27,7 +27,7 @@ CatFactResponse _$CatFactResponseFromJson(Map<String, dynamic> json) =>
       json['total'] as int,
     );
 
-Map<String, dynamic> _$CatFactResponseToJson(CatFactResponse instance) =>
+Map<String, dynamic> _$CatFactResponseToJson(CatModelResponse instance) =>
     <String, dynamic>{
       'current_page': instance.currentPage,
       'data': instance.data,
