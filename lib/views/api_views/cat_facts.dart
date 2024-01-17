@@ -21,11 +21,6 @@ class _CatFactsState extends State<CatFacts> {
 
   @override
   void initState() {
-    final CatProvider catProvider = Provider.of<CatProvider>(context, listen: false);
-    List<CatFact> catLoadedResults = catProvider.loadedResults;
-    setState(() {
-      filteredFacts = catLoadedResults;
-    });
     super.initState();
   }
 
@@ -40,7 +35,7 @@ class _CatFactsState extends State<CatFacts> {
             return Text('Error: ${snapshot.error}');
           } else {
             final CatProvider catProvider = Provider.of<CatProvider>(context, listen: false);
-            List<CatFact> catLoadedResults = catProvider.loadedResults;
+              List<CatFact> catLoadedResults = catProvider.loadedResults;
             return
               Column(
                 children: [
@@ -55,18 +50,20 @@ class _CatFactsState extends State<CatFacts> {
                         if (_debounceTimer != null) {
                           _debounceTimer!.cancel();
                         }
-                        _debounceTimer = Timer(Duration(milliseconds: 350), () {
+                        _debounceTimer = Timer(const Duration(milliseconds: 350), () {
                           setState(() {
                             filteredFacts = catLoadedResults
                                 .where((fact) => fact.fact.toLowerCase().contains(value.toLowerCase()))
                                 .toList();
+
+                            //catLoadedResults = filteredFacts;
                           });
                         });
                     }
                   )),
                   Expanded(
                     child: ListView.builder(
-                    itemCount: filteredFacts.length,
+                    itemCount: filteredFacts.isEmpty ? catLoadedResults.length : filteredFacts.length,
                     itemBuilder: (context, index) {
                       return Card(
                         elevation: 5,
@@ -77,7 +74,7 @@ class _CatFactsState extends State<CatFacts> {
                           title: Text("Fact about the cat #$index",
                               style: const TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.bold)),
-                          subtitle: Text(filteredFacts[index].fact,
+                          subtitle: Text(filteredFacts.isEmpty ? catLoadedResults[index].fact : filteredFacts[index].fact,
                             style: const TextStyle(fontSize: 18),),
                           trailing: const Icon(Icons.info_outline),
                           dense: true,
@@ -85,7 +82,7 @@ class _CatFactsState extends State<CatFacts> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => CatDetailPage(catFact: filteredFacts[index], index: index,),
+                                builder: (context) => CatDetailPage(catFact: filteredFacts.isEmpty ? catLoadedResults[index] : filteredFacts[index], index: index,),
                               ),
                             );
                           },

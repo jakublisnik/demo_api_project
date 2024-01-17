@@ -8,7 +8,7 @@ import '../models/cat_model.dart';
 
 
 class CatProvider extends ChangeNotifier {
-  late List<CatFact>_loadedResults;
+  List<CatFact>_loadedResults = [];
   List<CatFact> get loadedResults => _loadedResults;
 
   Future<http.Response> loadCatApi() async {
