@@ -33,11 +33,10 @@ class _CatFactsState extends State<CatFacts> {
           final CatProvider catProvider =
               Provider.of<CatProvider>(context, listen: false);
           List<CatFact> catLoadedResults = catProvider.loadedResults;
-
           return Column(
             children: [
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(20.0),
                 child: Row(
                   children: [
                     Expanded(
@@ -47,13 +46,12 @@ class _CatFactsState extends State<CatFacts> {
                             labelText: 'Hledat..',
                             suffixIcon: IconButton(
                                 onPressed: _onSaveButtonPressed,
-                                icon: Icon(Icons.save))),
+                                icon: const Icon(Icons.save))),
                         onChanged: (value) {
                           if (_debounceTimer != null) {
                             _debounceTimer!.cancel();
                           }
-                          _debounceTimer =
-                              Timer(const Duration(milliseconds: 500), () {
+                          _debounceTimer = Timer(const Duration(milliseconds: 500), () {
                             setState(() {
                               filteredFacts = catLoadedResults
                                   .where((fact) => fact.fact

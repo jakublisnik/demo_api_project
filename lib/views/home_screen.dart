@@ -23,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
         index: _selectedIndex,
         children:  [
           const CatFacts(),
-          //Here could be add another pages.
+          //Zde se mohou přidat další stránky viz BottomNavigationBar.
           Container(),
         ],
       ),
